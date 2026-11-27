@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nexo · Inbox conversacional</title>
+<meta name="description" content="Vista estática de demostración de Nexo, un CRM conversacional propio con inbox único e IA supervisada." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#f7f5f0; --surface:#fff; --surface-2:#fcfbf8; --surface-3:#f1efe9;
+  --border:#e6e3dc; --text:#1a1d21; --muted:#6f7480; --accent:#1877f2;
+  --success:#16a34a; --warning:#d97706; --danger:#dc2626;
+  --radius:14px; --shadow:0 1px 2px rgb(26 29 33/.04),0 8px 24px rgb(26 29 33/.04);
+}
+*{box-sizing:border-box;border-color:var(--border)}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:Manrope,system-ui,sans-serif;letter-spacing:-.025em;line-height:1.2;margin:0}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1240px;margin:auto;padding:0 20px}
+.eyebrow{font:500 11px/1.4 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.surface{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:8px;font-weight:600;border:1px solid transparent}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:#fff;border-color:var(--border);color:var(--text)}
+.muted{color:var(--muted)}
+.mono{font-family:'JetBrains Mono',monospace}
+header{position:sticky;top:0;z-index:20;background:rgb(247 245 240/.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:Manrope,sans-serif;font-weight:800;font-size:18px;letter-spacing:-.03em}
+.mark{width:32px;height:32px;border-radius:9px;background:var(--accent);display:grid;place-items:center;color:#fff;font-weight:800}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;background:#fff;border:1px solid var(--border);font-size:12px;color:var(--muted)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--success)}
+.hero{padding:64px 0 40px;max-width:720px}
+.hero h1{font-size:clamp(34px,5vw,54px);font-weight:700;margin:14px 0 16px}
+.hero p{font-size:17px;color:var(--muted);max-width:62ch;margin:0 0 24px}
+.notice{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:10px;background:#fff8ec;border:1px solid #f2dfbd;color:#6b4b12;font-size:13px;max-width:720px;margin-bottom:28px}
+.notice svg{flex:none;margin-top:2px}
+.section{padding:14px 0 44px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:18px}
+.section-head h2{font-size:26px;margin-top:6px}
+.app{display:grid;grid-template-columns:280px 1fr 264px;gap:0;overflow:hidden;min-height:520px}
+.app>div{min-width:0}
+.col{padding:18px;border-right:1px solid var(--border)}
+.col:last-child{border-right:0}
+.col-title{display:flex;align-items:center;justify-content:space-between;font-weight:650;margin-bottom:14px}
+.search{width:100%;height:38px;padding:0 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);font:inherit;font-size:13px;margin-bottom:12px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.chip{font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--muted)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.conv{padding:12px;border-radius:10px;border:1px solid transparent;margin-bottom:6px}
+.conv.active{background:#f2f7ff;border-color:#cfe0ff}
+.conv b{display:block;font-size:13px;font-weight:650}
+.conv span{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11px;color:var(--muted)}
+.tag{font-size:10px;padding:2px 7px;border-radius:999px;background:var(--surface-3);color:#475060}
+.tag.blue{background:#e8f1ff;color:#0f5fc4}
+.thread{display:flex;flex-direction:column;gap:14px;min-height:330px}
+.bubble{max-width:78%;padding:11px 14px;border-radius:12px;font-size:13px}
+.bubble.in{align-self:flex-start;background:var(--surface-3)}
+.bubble.out{align-self:flex-end;background:#e8f1ff;color:#0f3f7d}
+.bubble small{display:block;margin-top:5px;font-size:10px;opacity:.7}
+.composer{margin-top:auto;display:flex;gap:8px;padding-top:14px;border-top:1px solid var(--border)}
+.composer input{flex:1;height:40px;padding:0 12px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:13px}
+.approve{padding:12px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);margin-bottom:10px}
+.approve p{font-size:12px;margin:6px 0 10px;color:#39404a}
+.row{display:flex;gap:6px}
+.row .btn{min-height:32px;padding:0 10px;font-size:11px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.kv span:last-child{font-family:'JetBrains Mono',monospace;font-size:11px;color:#39404a;text-align:right;word-break:break-all}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{padding:18px}
+.card h3{font-size:15px;margin-bottom:5px}
+.card p{font-size:12px;color:var(--muted);margin:0 0 14px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
+.field input{width:100%;height:36px;padding:0 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface-2);font:11px 'JetBrains Mono',monospace;color:var(--text)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-bottom:12px}
+footer{border-top:1px solid var(--border);padding:28px 0 44px;color:var(--muted);font-size:12px}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+@media(max-width:1000px){.app{grid-template-columns:240px 1fr}.app .col:last-child{display:none}}
+@media(max-width:680px){.hero{padding:42px 0 28px}.app{display:block}.col{border-right:0;border-bottom:1px solid var(--border)}.app .col:nth-child(2){display:none}.section-head{align-items:start;flex-direction:column}.nav .pill{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="brand"><span class="mark">N</span> Nexo <span class="muted" style="font-weight:500;font-size:12px">/ CRM conversacional</span></div>
+    <span class="pill"><span class="dot"></span> Vista estática de demostración</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Inbox único · IA supervisada · Propio</div>
+    <h1>Un solo inbox para todas tus conversaciones.</h1>
+    <p>Web, Telegram, correo, WhatsApp e Instagram en una misma bandeja. La IA propone respuestas, pero una persona siempre aprueba antes del envío.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn btn-primary" href="https://github.com/AsterNodeLab/nexo-crm">Ver el código en GitHub</a>
+      <a class="btn btn-secondary" href="#canales">Ver configuración de canales</a>
+    </div>
+  </section>
+
+  <div class="notice">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+    <div><strong>Esto es una vista estática.</strong> GitHub Pages solo sirve archivos: no puede ejecutar la API ni la base de datos. Los datos de abajo son de ejemplo. La aplicación real se despliega en Vercel + Supabase; las instrucciones están en el repositorio.</div>
+  </div>
+
+  <section class="section" id="inbox">
+    <div class="section-head">
+      <div><div class="eyebrow">Producto</div><h2>El inbox</h2></div>
+      <span class="pill"><span class="dot"></span> 3 conversaciones abiertas</span>
+    </div>
+    <div class="surface app">
+      <div class="col">
+        <div class="col-title">Conversaciones <span class="muted mono" style="font-size:11px">03</span></div>
+        <input class="search" placeholder="Buscar conversaciones…" aria-label="Buscar conversaciones" />
+        <div class="filters"><span class="chip on">Todas</span><span class="chip">Abierta</span><span class="chip">Pendiente</span><span class="chip">Resuelta</span></div>
+        <div class="conv active"><b>María González</b><span>¿Puedo cambiar la fecha del seminario?</span><div class="meta"><span class="tag blue">Web</span><span>hace 2 min</span><span>· 1 sin leer</span></div></div>
+        <div class="conv"><b>Carlos Ruiz</b><span>Gracias, ya quedó claro 👍</span><div class="meta"><span class="tag">Telegram</span><span>hace 18 min</span></div></div>
+        <div class="conv"><b>Ana Torres</b><span>Consulta sobre la factura de septiembre</span><div class="meta"><span class="tag">Email</span><span>hace 1 h</span></div></div>
+      </div>
+      <div class="col">
+        <div class="col-title">María González <span class="tag blue">Web</span></div>
+        <div class="thread">
+          <div class="bubble in">Hola, ¿puedo cambiar la fecha del seminario de IA al próximo mes?<small>10:42</small></div>
+          <div class="bubble out">¡Hola María! Sí, puedo ayudarte. ¿Tienes algún mes en mente?<small>10:43</small></div>
+          <div class="bubble in">Me interesa noviembre. ¿Hay cupo?<small>10:45</small></div>
+          <div class="bubble in">También quería preguntar por el material de la clase 🧠<small>10:46</small></div>
+        </div>
+        <div class="composer"><input placeholder="Escribe una respuesta…" aria-label="Escribe una respuesta" /><button class="btn btn-primary">Enviar</button></div>
+      </div>
+      <div class="col">
+        <div class="col-title">Ficha y aprobaciones</div>
+        <div class="kv"><span>Nombre</span><span>María González</span></div>
+        <div class="kv"><span>Email</span><span>maria@example.com</span></div>
+        <div class="kv"><span>Etapa</span><span>Alumna</span></div>
+        <div class="kv"><span>Conversaciones</span><span>3</span></div>
+        <div style="margin-top:18px"><div class="eyebrow">Aprobación pendiente</div>
+          <div class="approve" style="margin-top:8px">
+            <span class="tag blue">Propuesta de IA</span>
+            <p>«Sí hay cupo en noviembre. Te comparto el temario y el enlace de inscripción.»</p>
+            <div class="row"><button class="btn btn-primary">Aprobar</button><button class="btn btn-secondary">Editar</button><button class="btn btn-secondary">Rechazar</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="canales">
+    <div class="section-head">
+      <div><div class="eyebrow">Integraciones</div><h2>Conecta tus canales</h2></div>
+      <p class="muted" style="max-width:46ch;margin:0;font-size:13px">Pega aquí los IDs y tokens. Los secretos se cifran en la base de datos y nunca vuelven al navegador.</p>
+    </div>
+    <div class="grid">
+      <div class="surface card"><span class="status"><span class="dot"></span> Configurado</span><h3>Chat web</h3><p>Widget embebible en tu sitio.</p><div class="field"><label>Orígenes permitidos</label><input value="https://toplearning.academy" readonly /></div><div class="field"><label>Título del widget</label><input value="¿En qué podemos ayudarte?" readonly /></div></div>
+      <div class="surface card"><span class="status"><span class="dot"></span> Configurado</span><h3>Telegram</h3><p>Mensajes y aprobaciones desde el bot.</p><div class="field"><label>Bot token</label><input value="••••••••••••" readonly /></div><div class="field"><label>Chat IDs (aprobadores)</label><input value="123456789" readonly /></div><div class="field"><label>Webhook</label><input value="/api/webhooks/telegram" readonly /></div></div>
+      <div class="surface card"><span class="status" style="color:var(--warning)"><span class="dot" style="background:var(--warning)"></span> Configuración avanzada</span><h3>Correo</h3><p>IMAP/SMTP en fase 2.</p><div class="field"><label>IMAP host</label><input value="imap.tudominio.com" readonly /></div><div class="field"><label>SMTP host</label><input value="smtp.tudominio.com" readonly /></div></div>
+      <div class="surface card"><span class="status" style="color:var(--muted)"><span class="dot" style="background:var(--muted)"></span> Pendiente</span><h3>WhatsApp Business</h3><p>Requiere verificación de Meta.</p><div class="field"><label>Phone number ID</label><input value="—" readonly /></div><div class="field"><label>Webhook</label><input value="/api/webhooks/whatsapp" readonly /></div></div>
+      <div class="surface card"><span class="status" style="color:var(--muted)"><span class="dot" style="background:var(--muted)"></span> Pendiente</span><h3>Instagram DM</h3><p>Cuenta Business vinculada a una Page.</p><div class="field"><label>App ID</label><input value="—" readonly /></div><div class="field"><label>Webhook</label><input value="/api/webhooks/instagram" readonly /></div></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>Nexo · CRM conversacional propio · Vista estática de demostración</span>
+    <span><a href="https://github.com/AsterNodeLab/nexo-crm">github.com/AsterNodeLab/nexo-crm</a></span>
+  </div>
+</footer>
+</body>
+</html>
